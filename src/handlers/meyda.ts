@@ -123,7 +123,8 @@ class meydaHandler implements FormatHandler {
 
       for (let i = 0; i < imageWidth; i ++) {
         const frame = samples.slice(i * Meyda.bufferSize, (i + 1) * Meyda.bufferSize);
-        const spectrum = Meyda.extract("amplitudeSpectrum", frame);
+        const filtered = Meyda.windowing(frame, "hanning");
+        const spectrum = Meyda.extract("amplitudeSpectrum", filtered);
         if (!(spectrum instanceof Float32Array)) throw "Failed to extract audio features!";
         const pixels = new Uint8ClampedArray(spectrum.length * 4);
         for (let i = 0; i < spectrum.length; i ++) {
